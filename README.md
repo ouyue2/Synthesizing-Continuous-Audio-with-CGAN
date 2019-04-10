@@ -15,4 +15,18 @@ conda install -c conda-forge librosa==0.6.2
 
 ## Training
 
+### Backup
+Sometimes training may occasionally collapse, so it is highly recommended to back up checkpoints offen. 
+To back up checkpoints in default path ```./train``` every hour, use
+```
+python backup.py
+```
+Set ```--train_dir``` and ```--backup_time ``` to customize the backups.
+
+### Monitor
+To monitor training via Tensorboard, use
+```
+tensorboard --logdir=./train
+```
+
 ## Generating
