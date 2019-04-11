@@ -129,32 +129,32 @@ def WaveGANDiscriminator(x,kernel_len=25,dim=64,use_batchnorm=False,phaseshuffle
     else:
         phaseshuffle = lambda x: x
 
-  	# Layer 0
-  	# [32768, 1] -> [4096, 64]
+    # Layer 0
+    # [32768, 1] -> [4096, 64]
     output = x
     with tf.variable_scope('downconv_0'):
     	output = tf.layers.conv1d(output, dim, kernel_len, 4, padding='SAME')
     output = lrelu(output)
     output = phaseshuffle(output)
 
-  	# Layer 1
-  	# [4096, 64] -> [1024, 128]
+    # Layer 1
+    # [4096, 64] -> [1024, 128]
     with tf.variable_scope('downconv_1'):
     	output = tf.layers.conv1d(output, dim * 2, kernel_len, 4, padding='SAME')
     	output = batchnorm(output)
     output = lrelu(output)
     output = phaseshuffle(output)
 
-  	# Layer 2
-  	# [1024, 128] -> [256, 256]
+    # Layer 2
+    # [1024, 128] -> [256, 256]
     with tf.variable_scope('downconv_2'):
     	output = tf.layers.conv1d(output, dim * 4, kernel_len, 4, padding='SAME')
     	output = batchnorm(output)
     output = lrelu(output)
     output = phaseshuffle(output)
 
-  	# Layer 3
-  	# [256, 256] -> [64, 512]
+    # Layer 3
+    # [256, 256] -> [64, 512]
     with tf.variable_scope('downconv_3'):
     	output = tf.layers.conv1d(output, dim * 8, kernel_len, 4, padding='SAME')
     	output = batchnorm(output)
@@ -176,12 +176,12 @@ def WaveGANDiscriminator(x,kernel_len=25,dim=64,use_batchnorm=False,phaseshuffle
     output = batchnorm(output)
     output = lrelu(output)
 
-  	# Flatten
+    # Flatten
     output = tf.reshape(output, [batch_size, -1])
 
-  	# Connect to single logit
+    # Connect to single logit
     with tf.variable_scope('output'):
         output = tf.layers.dense(output, 1)[:, 0]
 
-  	# Don't need to aggregate batchnorm update ops like we do for the generator because we only use the discriminator for training
+    # Don't need to aggregate batchnorm update ops like we do for the generator because we only use the discriminator for training
     return output

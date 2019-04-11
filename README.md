@@ -21,12 +21,12 @@ To back up checkpoints in default path ```./train``` every hour, use
 ```
 python backup.py
 ```
-Set ```--train_dir``` and ```--backup_time ``` to customize the backups.
+Set ```--train_dir``` and ```--backup_time``` to customize the backups.
 
 ### Monitor
 To monitor training via Tensorboard, use
 ```
-tensorboard --logdir=./train
+tensorboard --logdir=./train --port YOUR_PORT
 ```
 
 ## Generating
