@@ -54,16 +54,6 @@ def train(fps, args):
         print('{} ({}): {}'.format(v.get_shape().as_list(),v_n,v.name))
     print('Total params: {} ({:.2f} MB)'.format(nparams, (float(nparams) * 4) / (1024 * 1024)))
 
-    # Summarize
-    tf.summary.audio('x', x, args.data_sample_rate)
-    tf.summary.audio('G_z', G_z, args.data_sample_rate)
-    G_z_rms = tf.sqrt(tf.reduce_mean(tf.square(G_z[:, :, 0]), axis=1))
-    x_rms = tf.sqrt(tf.reduce_mean(tf.square(x[:, :, 0]), axis=1))
-    tf.summary.histogram('x_rms_batch', x_rms)
-    tf.summary.histogram('G_z_rms_batch', G_z_rms)
-    tf.summary.scalar('x_rms', tf.reduce_mean(x_rms))
-    tf.summary.scalar('G_z_rms', tf.reduce_mean(G_z_rms))
-
     # Make real discriminator
     with tf.name_scope('D_x'), tf.variable_scope('D'):
         D_x = WaveGANDiscriminator(x, **args.wavegan_d_kwargs)
@@ -120,9 +110,6 @@ def train(fps, args):
     else:
         raise NotImplementedError()
 
-    tf.summary.scalar('G_loss', G_loss)
-    tf.summary.scalar('D_loss', D_loss)
-
     # Create (recommended) optimizer
     if args.wavegan_loss == 'dcgan':
         G_opt = tf.train.AdamOptimizer(learning_rate=2e-4, beta1=0.5)
@@ -138,6 +125,14 @@ def train(fps, args):
     # Create training ops
     G_train_op = G_opt.minimize(G_loss, var_list=G_vars, global_step=tf.train.get_or_create_global_step())
     D_train_op = D_opt.minimize(D_loss, var_list=D_vars)
+
+    # Summarize
+    tf.summary.audio('x', x, args.data_sample_rate)
+    tf.summary.audio('G_z', G_z, args.data_sample_rate)
+    tf.summary.audio('yG_z', yG_z, args.data_sample_rate)
+
+    tf.summary.scalar('G_loss', G_loss)
+    tf.summary.scalar('D_loss', D_loss)
 
     # Run training
     with tf.train.MonitoredTrainingSession(checkpoint_dir=args.train_dir,
