@@ -40,8 +40,8 @@ def train(fps, args):
     # Make generator
     with tf.variable_scope('G'):
         # use first 512 point from real data as y
-        y = tf.slice(x, [0, 0, 0], [-1, args.wavegan_genr_pp_len, -1])
-        G_z = WaveGANGenerator(y, z, train=True, **args.wavegan_g_kwargs)
+        y = tf.slice(x, [0, 0, 0], [-1, args.wavegan_smooth_len, -1])
+        G_z = WaveGANGenerator(y, z, train=True, y_len=args.wavegan_smooth_len, **args.wavegan_g_kwargs)
     G_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope='G')
     # Print G summary
     print('-' * 80)
@@ -185,6 +185,7 @@ if __name__ == '__main__':
     wavegan_args.add_argument('--wavegan_loss', type=str, choices=['dcgan', 'lsgan', 'wgan', 'wgan-gp'],help='Which GAN loss to use')
     wavegan_args.add_argument('--wavegan_genr_pp_len', type=int,help='Length of post-processing filter for DCGAN')
     wavegan_args.add_argument('--wavegan_disc_phaseshuffle', type=int,help='Radius of phase shuffle operation')
+    wavegan_args.add_argument('--wavegan_smooth_len', type=int, help='Length of the pervious audio used to smooth the connection')
 
     train_args = parser.add_argument_group('Train')
     train_args.add_argument('--train_batch_size', type=int,help='Batch size')
@@ -213,6 +214,7 @@ if __name__ == '__main__':
                         wavegan_loss='wgan-gp',
                         wavegan_genr_pp_len=512,
                         wavegan_disc_phaseshuffle=2,
+                        wavegan_smooth_len=4096, 
                         train_batch_size=64,
                         train_save_secs=300,
                         train_summary_secs=120,

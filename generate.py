@@ -20,7 +20,7 @@ def generate(args):
         G_z = graph.get_tensor_by_name('G_z:0')[:, :, 0]
         
         # Loop_Init
-        _y = np.zeros([1, args.wavegan_genr_pp_len,1])
+        _y = np.zeros([1, args.wavegan_smooth_len,1])
         wv = np.zeros([1,1])
         gen_count = 0
         
@@ -28,7 +28,7 @@ def generate(args):
         while True:
             _z = (np.random.rand(1, 100) * 2.) - 1.
             wv = np.concatenate((wv,sess.run(G_z, {y: _y, z: _z})), axis = 1)
-            _y = np.reshape(wv[:,-1-args.wavegan_genr_pp_len:-1], (1,-1,1))
+            _y = np.reshape(wv[:,-1-args.wavegan_smooth_len:-1], (1,-1,1))
             gen_count = gen_count+1
             
             if gen_count==4:
@@ -52,6 +52,7 @@ if __name__ == '__main__':
     parser.add_argument('--wavegan_kernel_len', type=int,help='Length of 1D filter kernels')
     parser.add_argument('--wavegan_dim', type=int,help='Dimensionality multiplier for model of G and D')
     parser.add_argument('--wavegan_batchnorm', action='store_true', dest='wavegan_batchnorm',help='Enable batchnorm')
+    parser.add_argument('--wavegan_smooth_len', type=int, help='Length of the pervious audio used to smooth the connection')
 	
     parser.set_defaults(checkpoint=None, 
                         train_dir='./train',   
@@ -61,7 +62,8 @@ if __name__ == '__main__':
                         wavegan_latent_dim=100,
                         wavegan_kernel_len=25,
                         wavegan_dim=64,
-                        wavegan_batchnorm=False)
+                        wavegan_batchnorm=False, 
+                        wavegan_smooth_len=4096)
 	
     args = parser.parse_args()
     

@@ -12,7 +12,7 @@ def conv1d_transpose(inputs,filters,kernel_width,stride=4,padding='same'):
     Input: z:[None, 100],y:[None,512]
     Output: [None, 32768, 1]
 """
-def WaveGANGenerator(y,z,slice_len=32768,kernel_len=25,y_len=512,dim=64,use_batchnorm=False,train=False):
+def WaveGANGenerator(y,z,slice_len=32768,kernel_len=25,y_len=4096,dim=64,use_batchnorm=False,train=False):
     batch_size = tf.shape(z)[0]
     if use_batchnorm:
         batchnorm = lambda x: tf.layers.batch_normalization(x, training=train)
@@ -114,7 +114,7 @@ def apply_phaseshuffle(x, rad, pad_type='reflect'):
 
 
 """
-  Input: [None, slice_len, nch]
+  Input: [None, 32768, nch]
   Output: [None] (linear output)
 """
 def WaveGANDiscriminator(x,kernel_len=25,dim=64,use_batchnorm=False,phaseshuffle_rad=0):
@@ -130,41 +130,41 @@ def WaveGANDiscriminator(x,kernel_len=25,dim=64,use_batchnorm=False,phaseshuffle
         phaseshuffle = lambda x: x
 
     # Layer 0
-    # [32768, 1] -> [4096, 64]
+    # [32768, 1] -> [8192, 64]
     output = x
     with tf.variable_scope('downconv_0'):
-    	output = tf.layers.conv1d(output, dim, kernel_len, 4, padding='SAME')
+    	output = tf.layers.conv1d(output, dim, kernel_len, 4, padding='same')
     output = lrelu(output)
     output = phaseshuffle(output)
 
     # Layer 1
-    # [4096, 64] -> [1024, 128]
+    # [8192, 64] -> [2048, 128]
     with tf.variable_scope('downconv_1'):
-    	output = tf.layers.conv1d(output, dim * 2, kernel_len, 4, padding='SAME')
+    	output = tf.layers.conv1d(output, dim * 2, kernel_len, 4, padding='same')
     	output = batchnorm(output)
     output = lrelu(output)
     output = phaseshuffle(output)
 
     # Layer 2
-    # [1024, 128] -> [256, 256]
+    # [2048, 128] -> [512, 256]
     with tf.variable_scope('downconv_2'):
-    	output = tf.layers.conv1d(output, dim * 4, kernel_len, 4, padding='SAME')
+    	output = tf.layers.conv1d(output, dim * 4, kernel_len, 4, padding='same')
     	output = batchnorm(output)
     output = lrelu(output)
     output = phaseshuffle(output)
 
     # Layer 3
-    # [256, 256] -> [64, 512]
+    # [512, 256] -> [128, 512]
     with tf.variable_scope('downconv_3'):
-    	output = tf.layers.conv1d(output, dim * 8, kernel_len, 4, padding='SAME')
+    	output = tf.layers.conv1d(output, dim * 8, kernel_len, 4, padding='same')
     	output = batchnorm(output)
     output = lrelu(output)
     output = phaseshuffle(output)
 
   	# Layer 4
-  	# [64, 512] -> [16, 1024]
+  	# [128, 512] -> [32, 1024]
     with tf.variable_scope('downconv_4'):
-    	output = tf.layers.conv1d(output, dim * 16, kernel_len, 4, padding='SAME')
+    	output = tf.layers.conv1d(output, dim * 16, kernel_len, 4, padding='same')
     	output = batchnorm(output)
     output = lrelu(output)
 
@@ -172,7 +172,7 @@ def WaveGANDiscriminator(x,kernel_len=25,dim=64,use_batchnorm=False,phaseshuffle
     # Layer 5
     # [32, 1024] -> [16, 2048]
     with tf.variable_scope('downconv_5'):
-      	output = tf.layers.conv1d(output, dim * 32, kernel_len, 2, padding='SAME')
+      	output = tf.layers.conv1d(output, dim * 32, kernel_len, 2, padding='same')
     output = batchnorm(output)
     output = lrelu(output)
 
