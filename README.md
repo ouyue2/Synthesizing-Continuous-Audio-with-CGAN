@@ -14,10 +14,14 @@ conda install -c conda-forge librosa==0.6.2
 ## Data Selection
 
 ## Training
+To train data from data in ```./data/```, use
+```
+python main.py train --data_dir ./data/ --data_fast_wav --verbose
+```
 
 ### Backup
-Sometimes training may occasionally collapse, so it is highly recommended to back up checkpoints offen. 
-To back up checkpoints in default path ```./train``` every hour, use
+Sometimes training may occasionally collapse, so it is highly recommended to back up checkpoints often. 
+To back up checkpoints in default path ```./train/``` every hour, use
 ```
 python backup.py
 ```
@@ -26,7 +30,11 @@ Set ```--train_dir``` and ```--backup_time``` to customize the backups.
 ### Monitor
 To monitor training via Tensorboard, use
 ```
-tensorboard --logdir=./train --port YOUR_PORT
+tensorboard --logdir ./train --port PORT
 ```
 
 ## Generating
+To generate audio from selected trained model, use
+```
+python main.py generate --ckpt_path ./train/model.ckpt-X --wav_out_path ./gen.wav
+```

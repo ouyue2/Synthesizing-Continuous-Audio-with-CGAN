@@ -8,10 +8,10 @@ if __name__ == '__main__':
   import sys
   import time
   
-  parser = argparse.ArgumentParser(description='Script for backing up checkpoints')
+  parser = argparse.ArgumentParser(description='script for backing up checkpoints')
 	
-  parser.add_argument('--train_dir', type=str, help='Training directory')
-  parser.add_argument('--backup_time', type=int, help='Time before next backup task begins in minutes')
+  parser.add_argument('--train_dir', type=str, help='training directory')
+  parser.add_argument('--backup_time', type=int, help='time before next backup task begins in minutes')
 
   parser.set_defaults(train_dir='./train',backup_time=60)
 	

@@ -7,12 +7,12 @@ def conv1d_transpose(inputs,filters,kernel_width,stride=4,padding='same'):
     return result[:, 0]
 
 
-
 """
     Input: z:[None, 100],y:[None,512]
     Output: [None, 32768, 1]
 """
-def WaveGANGenerator(y,z,slice_len=32768,kernel_len=25,y_len=4096,dim=64,use_batchnorm=False,train=False):
+
+def WaveGANGenerator(y,z,kernel_len=25,y_len=4096,dim=64,use_batchnorm=False,train=False):
     batch_size = tf.shape(z)[0]
     if use_batchnorm:
         batchnorm = lambda x: tf.layers.batch_normalization(x, training=train)
@@ -117,6 +117,7 @@ def apply_phaseshuffle(x, rad, pad_type='reflect'):
   Input: [None, 32768, nch]
   Output: [None] (linear output)
 """
+
 def WaveGANDiscriminator(x,kernel_len=25,dim=64,use_batchnorm=False,phaseshuffle_rad=0):
     batch_size = tf.shape(x)[0]
     slice_len = int(x.get_shape()[1])

@@ -2,11 +2,8 @@ import os
 import numpy as np
 import tensorflow as tf
 
-from inference import infer
 
-def generate(args):
-    import librosa
-    
+def generate(args):    
     infer_dir = os.path.join(args.train_dir, 'infer')
     infer_metagraph_fp = os.path.join(infer_dir, 'infer.meta')
     tf.reset_default_graph()
@@ -14,7 +11,7 @@ def generate(args):
     graph = tf.get_default_graph()
     
     with tf.Session() as sess:
-        saver.restore(sess, args.checkpoint)
+        saver.restore(sess, args.ckpt_path)
         z = graph.get_tensor_by_name('z:0')
         y = graph.get_tensor_by_name('y:0')
         G_z = graph.get_tensor_by_name('G_z:0')[:, :, 0]
@@ -32,47 +29,20 @@ def generate(args):
             gen_count = gen_count+1
             
             if gen_count==4:
+                import librosa
                 librosa.output.write_wav(args.wav_out_path, wv[0, :], 16000)
                 gen_count=0
 
 
 if __name__ == '__main__':
     import argparse
-    import glob
-    import sys
+    from main import argument
 	
-    parser = argparse.ArgumentParser(description='WaveGan generation script')
+    parser = argparse.ArgumentParser(description='script for generating')
+    arg = argument(parser)
+    arg.generate()
+    args = arg.args_init()
 	
-    parser.add_argument('checkpoint', type=str, help='Which model checkpoint to generate from e.g. "(fullpath)/model.ckpt-XXX"')
-    parser.add_argument('--train_dir', type=str, help='Training directory')
-    parser.add_argument('--wav_out_path', type=str, help='Path to output wav file')
-    parser.add_argument('--wavegan_genr_pp_len', type=int,help='Length of post-processing filter for DCGAN')
-    parser.add_argument('--wavegan_latent_dim', type=int,help='Number of dimensions of the latent space')
-    parser.add_argument('--data_slice_len', type=int, choices=[16384, 32768, 65536],help='Number of audio samples per slice (maximum generation length)')
-    parser.add_argument('--wavegan_kernel_len', type=int,help='Length of 1D filter kernels')
-    parser.add_argument('--wavegan_dim', type=int,help='Dimensionality multiplier for model of G and D')
-    parser.add_argument('--wavegan_batchnorm', action='store_true', dest='wavegan_batchnorm',help='Enable batchnorm')
-    parser.add_argument('--wavegan_smooth_len', type=int, help='Length of the pervious audio used to smooth the connection')
-	
-    parser.set_defaults(checkpoint=None, 
-                        train_dir='./train',   
-                        wav_out_path='./gen.wav', 
-                        wavegan_genr_pp_len=512,
-                        data_slice_len=32768,
-                        wavegan_latent_dim=100,
-                        wavegan_kernel_len=25,
-                        wavegan_dim=64,
-                        wavegan_batchnorm=False, 
-                        wavegan_smooth_len=4096)
-	
-    args = parser.parse_args()
-    
-    setattr(args, 'wavegan_g_kwargs', {
-        'slice_len': args.data_slice_len,
-        'kernel_len': args.wavegan_kernel_len,
-        'dim': args.wavegan_dim,
-        'use_batchnorm': args.wavegan_batchnorm,
-    })
-	
+    from infer import infer
     infer(args)
     generate(args)
