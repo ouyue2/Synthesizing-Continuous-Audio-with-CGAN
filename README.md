@@ -11,7 +11,12 @@ conda install matplotlib==3.0.2
 conda install -c conda-forge librosa==0.6.2
 ```
 
-## Data Selection
+## Dataset
+You can use any folders containing audio for training. Here are some examples:
+- [Bird Song](http://people.tamu.edu/~ouyue2/files/s_gen/data/bird.wav), from [Forest Birdsong](https://www.youtube.com/watch?v=Qm846KdZN_c)
+- [Ocean Wave](http://people.tamu.edu/~ouyue2/files/s_gen/data/ocean.wav), from [Relaxing Video of A Tropical Beach](https://www.youtube.com/watch?v=qREKP9oijWI)
+- [Piano](http://people.tamu.edu/~ouyue2/files/s_gen/data/piano.wav), from [Beautiful Piano Music](https://www.youtube.com/watch?v=HSOtku1j600)
+- [Railway Train](http://people.tamu.edu/~ouyue2/files/s_gen/data/railwaytrain.wav), from [Train Sounds](https://www.youtube.com/watch?v=R-R65Gg0CJ8)
 
 ## Training
 To train data from data in ```./data/```, use
