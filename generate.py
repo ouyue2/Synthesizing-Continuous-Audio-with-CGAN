@@ -18,7 +18,15 @@ def generate(args):
     with tf.Session() as sess:
         from librosa.output import write_wav as wav_w
         
-        saver.restore(sess, args.ckpt_path)
+        if args.ckpt_path is None:
+            ckpt = tf.train.latest_checkpoint(args.train_dir)
+        else:
+            ckpt = args.ckpt_path
+        
+        if ckpt is None:
+            raise NotImplementedError('No checkpoint found!')
+        
+        saver.restore(sess, ckpt)
         z = graph.get_tensor_by_name('z:0')
         y = graph.get_tensor_by_name('y:0')
         G_z = graph.get_tensor_by_name('G_z:0')[:, :, 0]
@@ -47,7 +55,6 @@ def generate(args):
             wav_w(args.wav_out_path, wv[0, 0:min(wv.shape[1],out_length-1)], 16000)
             print("KeyboardInterrupt Called!")
             
-
 
 if __name__ == '__main__':
     import argparse

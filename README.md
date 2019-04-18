@@ -41,6 +41,6 @@ tensorboard --logdir ./train --port PORT
 ## Generating
 To generate audio from selected trained model, use
 ```
-python main.py generate --ckpt_path ./train/model.ckpt-X --wav_out_path ./gen.wav --wav_out_time 150
+python main.py generate --wav_out_time 150
 ```
-Repace ```--ckpt_path ./train/model.ckpt-X``` with your model path. ```--wav_out_time``` should be set in seconds, omitting means generating until KeyboardInterrupt called. 
+Generating will use the latest checkpoint in train dir unless ```--ckpt_path``` is set to your model path. ```--wav_out_time``` should be set in seconds, omitting means generating until KeyboardInterrupt called. 
