@@ -45,7 +45,7 @@ class argument:
         train_args.add_argument('--wavegan_disc_nupdates', type=int,help='number of discriminator updates per generator update')
         train_args.add_argument('--wavegan_disc_phaseshuffle', type=int,help='radius of phase shuffle operation')
         
-        self.parser.set_defaults(data_dir=None,
+        self.parser.set_defaults(data_dir = './data',
                                  data_sample_rate=11025,
                                  data_num_channels=1,
                                  data_first_slice=False,
@@ -62,12 +62,10 @@ class argument:
     def generate(self):
         generate_args = self.parser.add_argument_group('generate')
         generate_args.add_argument('--ckpt_path', type=str, help='use chosen checkpoint to generate. if not chosen, use the lastest checkpoint in train_dir')
-        generate_args.add_argument('--gui_mode', action='store_true', dest='gui_mode',help='set when use GUI to run generating')
         generate_args.add_argument('--wav_out_path', type=str, help='path to output wav file')
         generate_args.add_argument('--wav_out_time', type=int, help='output wav file length in seconds, None means inf')
         
         self.parser.set_defaults(ckpt_path = None,
-                                 gui_mode = False,
                                  wav_out_path = './gen.wav',
                                  wav_out_time = None)
     def main(self):
