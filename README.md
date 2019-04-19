@@ -10,12 +10,16 @@ conda install scipy==1.0.0
 conda install matplotlib==3.0.2
 conda install -c conda-forge librosa==0.6.2
 ```
+For GUI
+```
+conda install pyqt==5.9.2
+```
 
 ## Dataset
 You can use any folders containing audio for training. Here are some examples:
 - [Bird Song](http://people.tamu.edu/~ouyue2/files/s_gen/data/bird.wav), from [Forest Birdsong](https://www.youtube.com/watch?v=Qm846KdZN_c)
 - [Ocean Wave](http://people.tamu.edu/~ouyue2/files/s_gen/data/ocean.wav), from [Relaxing Video of A Tropical Beach](https://www.youtube.com/watch?v=qREKP9oijWI)
-- [Piano](http://people.tamu.edu/~ouyue2/files/s_gen/data/piano.wav), from [Beautiful Piano Music](https://www.youtube.com/watch?v=HSOtku1j600)
+- [Piano](http://people.tamu.edu/~ouyue2/files/s_gen/data/piano.wav)(Not Recommeded), from [Beautiful Piano Music](https://www.youtube.com/watch?v=HSOtku1j600)
 - [Railway Train](http://people.tamu.edu/~ouyue2/files/s_gen/data/railwaytrain.wav), from [Train Sounds](https://www.youtube.com/watch?v=R-R65Gg0CJ8)
 
 ## Training
@@ -39,8 +43,17 @@ tensorboard --logdir ./train --port PORT
 ```
 
 ## Generating
-To generate audio from selected trained model, use
+
+### Generating in Command Line 
+To generate audio in command line, use
 ```
 python main.py generate --wav_out_time 150
 ```
 Generating will use the latest checkpoint in train dir unless ```--ckpt_path``` is set to your model path. ```--wav_out_time``` should be set in seconds, omitting means generating until KeyboardInterrupt called. 
+
+### Generating with GUI
+To run GUI for generating audio, use
+```
+python gui_generate.py
+```
+Parameters can be set in GUI. 
