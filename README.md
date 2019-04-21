@@ -17,10 +17,12 @@ conda install pyqt==5.9.2
 
 ## Dataset
 You can use any folders containing audio for training. Here are some examples:
-- [Bird Song](http://people.tamu.edu/~ouyue2/files/s_gen/data/bird.wav), from [Forest Birdsong](https://www.youtube.com/watch?v=Qm846KdZN_c)
+- [Bird Song](http://people.tamu.edu/~ouyue2/files/s_gen/data/bird.wav), from [Forest Birdsong](https://www.youtube.com/watch?v=Qm846KdZN_c), checkpoints for reloaded or generating available on [Google Drive](https://drive.google.com/drive/folders/1tUqYkWs_mxOduUx7-uz3-JCyHIKicOjD?usp=sharing)
 - [Ocean Wave](http://people.tamu.edu/~ouyue2/files/s_gen/data/ocean.wav), from [Relaxing Video of A Tropical Beach](https://www.youtube.com/watch?v=qREKP9oijWI)
 - [Piano](http://people.tamu.edu/~ouyue2/files/s_gen/data/piano.wav)(Not Recommeded), from [Beautiful Piano Music](https://www.youtube.com/watch?v=HSOtku1j600)
 - [Railway Train](http://people.tamu.edu/~ouyue2/files/s_gen/data/railwaytrain.wav), from [Train Sounds](https://www.youtube.com/watch?v=R-R65Gg0CJ8)
+
+Example results from datasets above are available on [Google Drive](https://drive.google.com/drive/folders/12m0RmGZlqs3sw-aXUNP0nfvdK5cuPA6K?usp=sharing). 
 
 ## Training
 To train data from data in ```./data/```, use
