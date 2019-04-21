@@ -19,18 +19,19 @@ class argument:
         global_args.add_argument('--wavegan_dim', type=int,help='dimensionality multiplier for model of G and D')
         global_args.add_argument('--wavegan_batchnorm', action='store_true', dest='wavegan_batchnorm',help='enable batchnorm')
         global_args.add_argument('--wavegan_smooth_len', type=int, help='length of the pervious audio used to smooth the connection')
+        global_args.add_argument('--data_sample_rate', type=int,help='number of audio samples per second')
         
         self.parser.set_defaults(train_dir = './train',
                                  wavegan_latent_dim=100,
                                  wavegan_kernel_len=25,
                                  wavegan_dim=64,
                                  wavegan_batchnorm=False,
-                                 wavegan_smooth_len=4096)
+                                 wavegan_smooth_len=4096,
+                                 data_sample_rate=11025)
 
     def train(self):
         data_args = self.parser.add_argument_group('data for train')
         data_args.add_argument('--data_dir', type=str,help='data directory containing *only* audio files to load')
-        data_args.add_argument('--data_sample_rate', type=int,help='number of audio samples per second')
         data_args.add_argument('--data_num_channels', type=int,help='number of audio channels to generate (for >2, must match that of data)')
         data_args.add_argument('--data_first_slice', action='store_true', dest='data_first_slice',help='if set, only use the first slice each audio example')
         data_args.add_argument('--data_normalize', action='store_true', dest='data_normalize',help='if set, normalize the training examples')
@@ -46,7 +47,6 @@ class argument:
         train_args.add_argument('--wavegan_disc_phaseshuffle', type=int,help='radius of phase shuffle operation')
         
         self.parser.set_defaults(data_dir = './data',
-                                 data_sample_rate=11025,
                                  data_num_channels=1,
                                  data_first_slice=False,
                                  data_normalize=False,
